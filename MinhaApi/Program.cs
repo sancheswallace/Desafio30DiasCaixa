@@ -1,15 +1,19 @@
+using MinhaApi.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Adiciona Controllers
+// Controllers
 builder.Services.AddControllers();
 
-// Adiciona suporte ao Swagger/OpenAPI
+// Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Registro do repositório
+builder.Services.AddSingleton<ProdutoRepository>();
+
 var app = builder.Build();
 
-// Ativa Swagger no ambiente de desenvolvimento
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -18,7 +22,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// Mapeia Controllers automaticamente
 app.MapControllers();
 
 app.Run();

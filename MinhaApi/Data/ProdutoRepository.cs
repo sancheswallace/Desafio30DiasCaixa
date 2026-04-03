@@ -7,7 +7,8 @@ public class ProdutoRepository
     private readonly List<Produto> _produtos = new()
     {
         new Produto(1, "Mouse", 50),
-        new Produto(2, "Teclado", 120)
+        new Produto(2, "Teclado", 120),
+        new Produto(3, "Monitor", 500)
     };
 
     public List<Produto> Listar() => _produtos;

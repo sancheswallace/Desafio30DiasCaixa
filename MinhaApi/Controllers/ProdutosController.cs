@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using MinhaApi.Data;
+using MinhaApi.Models;
 
 namespace MinhaApi.Controllers;
 
@@ -6,50 +8,53 @@ namespace MinhaApi.Controllers;
 [Route("api/[controller]")]
 public class ProdutosController : ControllerBase
 {
-    private static readonly List<Produto> _produtos = new()
+    private readonly ProdutoRepository _repo;
+
+    public ProdutosController(ProdutoRepository repo)
     {
-        new Produto(1, "Mouse", 50),
-        new Produto(2, "Teclado", 120)
-    };
+        _repo = repo;
+    }
 
     [HttpGet]
-    public IActionResult Get() => Ok(_produtos);
+    public IActionResult Get()
+    {
+        var produtos = _repo.Listar();
+        return Ok(produtos);
+    }
 
     [HttpGet("{id}")]
     public IActionResult GetById(int id)
     {
-        var produto = _produtos.FirstOrDefault(p => p.Id == id);
+        var produto = _repo.BuscarPorId(id);
         return produto is null ? NotFound() : Ok(produto);
     }
 
     [HttpPost]
     public IActionResult Post(Produto produto)
     {
-        _produtos.Add(produto);
+        _repo.Adicionar(produto);
         return CreatedAtAction(nameof(GetById), new { id = produto.Id }, produto);
     }
 
     [HttpPut("{id}")]
     public IActionResult Put(int id, Produto produto)
     {
-        var index = _produtos.FindIndex(p => p.Id == id);
-        if (index == -1)
+        var existente = _repo.BuscarPorId(id);
+        if (existente is null)
             return NotFound();
 
-        _produtos[index] = produto;
+        _repo.Atualizar(id, produto);
         return NoContent();
     }
 
     [HttpDelete("{id}")]
     public IActionResult Delete(int id)
     {
-        var produto = _produtos.FirstOrDefault(p => p.Id == id);
-        if (produto is null)
+        var existente = _repo.BuscarPorId(id);
+        if (existente is null)
             return NotFound();
 
-        _produtos.Remove(produto);
+        _repo.Remover(id);
         return NoContent();
     }
 }
-
-public record Produto(int Id, string Nome, decimal Preco);
