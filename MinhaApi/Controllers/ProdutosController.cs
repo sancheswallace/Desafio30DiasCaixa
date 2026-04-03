@@ -8,53 +8,53 @@ namespace MinhaApi.Controllers;
 [Route("api/[controller]")]
 public class ProdutosController : ControllerBase
 {
-    private readonly ProdutoRepository _repo;
+    private readonly IProdutoRepository _service;
 
-    public ProdutosController(ProdutoRepository repo)
+    public ProdutosController(IProdutoRepository service)
     {
-        _repo = repo;
+        _service = service;
     }
 
     [HttpGet]
     public IActionResult Get()
     {
-        var produtos = _repo.Listar();
+        var produtos = _service.Listar();
         return Ok(produtos);
     }
 
     [HttpGet("{id}")]
     public IActionResult GetById(int id)
     {
-        var produto = _repo.BuscarPorId(id);
+        var produto = _service.BuscarPorId(id);
         return produto is null ? NotFound() : Ok(produto);
     }
 
     [HttpPost]
     public IActionResult Post(Produto produto)
     {
-        _repo.Adicionar(produto);
+        _service.Adicionar(produto);
         return CreatedAtAction(nameof(GetById), new { id = produto.Id }, produto);
     }
 
     [HttpPut("{id}")]
     public IActionResult Put(int id, Produto produto)
     {
-        var existente = _repo.BuscarPorId(id);
+        var existente = _service.BuscarPorId(id);
         if (existente is null)
             return NotFound();
 
-        _repo.Atualizar(id, produto);
+        _service.Atualizar(id, produto);
         return NoContent();
     }
 
     [HttpDelete("{id}")]
     public IActionResult Delete(int id)
     {
-        var existente = _repo.BuscarPorId(id);
+        var existente = _service.BuscarPorId(id);
         if (existente is null)
             return NotFound();
 
-        _repo.Remover(id);
+        _service.Remover(id);
         return NoContent();
     }
 }

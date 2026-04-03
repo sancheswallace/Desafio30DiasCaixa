@@ -2,7 +2,7 @@ using MinhaApi.Models;
 
 namespace MinhaApi.Data;
 
-public class ProdutoRepository
+public class ProdutoRepository : IProdutoRepository
 {
     private readonly List<Produto> _produtos = new()
     {
@@ -11,10 +11,10 @@ public class ProdutoRepository
         new Produto(3, "Monitor", 500)
     };
 
-    public List<Produto> Listar() => _produtos;
+    public IEnumerable<Produto> Listar() => _produtos;
 
-    public Produto? BuscarPorId(int id) =>
-        _produtos.FirstOrDefault(p => p.Id == id);
+    public Produto BuscarPorId(int id) =>
+        _produtos.First(p => p.Id == id);
 
     public void Adicionar(Produto produto) =>
         _produtos.Add(produto);
