@@ -9,8 +9,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Registro do repositório
+// Registro dos repositórios
 builder.Services.AddSingleton<ProdutoRepository>();
+builder.Services.AddSingleton<ClienteRepository>();
 
 var app = builder.Build();
 
