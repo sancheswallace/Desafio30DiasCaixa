@@ -2,7 +2,7 @@ using Moq;
 using Xunit;
 using Microsoft.AspNetCore.Mvc;
 using MinhaApi.Controllers;
-using MinhaApi.Services;
+using MinhaApi.Data;
 using MinhaApi.Models;
 
 public class ProdutosControllerTests
@@ -11,11 +11,11 @@ public class ProdutosControllerTests
     public void GetById_DeveRetornarOk_QuandoProdutoExiste()
     {
         // Arrange
-        var mockService = new Mock<IProdutoService>();
-        mockService.Setup(s => s.ObterPorId(1))
-                   .Returns(new Produto(1, "Mouse", 50));
+        var mockRepo = new Mock<IProdutoRepository>();
+        mockRepo.Setup(r => r.BuscarPorId(1))
+                .Returns(new Produto(1, "Mouse", 50));
 
-        var controller = new ProdutosController(mockService.Object);
+        var controller = new ProdutosController(mockRepo.Object);
 
         // Act
         var resultado = controller.GetById(1);
@@ -30,11 +30,11 @@ public class ProdutosControllerTests
     public void GetById_DeveRetornarNotFound_QuandoProdutoNaoExiste()
     {
         // Arrange
-        var mockService = new Mock<IProdutoService>();
-        mockService.Setup(s => s.ObterPorId(99))
-                   .Returns((Produto)null);
+        var mockRepo = new Mock<IProdutoRepository>();
+        mockRepo.Setup(r => r.BuscarPorId(99))
+                .Returns((Produto?)null);
 
-        var controller = new ProdutosController(mockService.Object);
+        var controller = new ProdutosController(mockRepo.Object);
 
         // Act
         var resultado = controller.GetById(99);
