@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MinhaApi.Data;
 using MinhaApi.Models;
+using MinhaApi.Services;
 
 namespace MinhaApi.Controllers;
 
@@ -8,9 +9,9 @@ namespace MinhaApi.Controllers;
 [Route("api/[controller]")]
 public class ProdutosController : ControllerBase
 {
-    private readonly IProdutoRepository _service;
+    private readonly IProdutoService _service;
 
-    public ProdutosController(IProdutoRepository service)
+    public ProdutosController(IProdutoService service)
     {
         _service = service;
     }
@@ -25,21 +26,21 @@ public class ProdutosController : ControllerBase
     [HttpGet("{id}")]
     public IActionResult GetById(int id)
     {
-        var produto = _service.BuscarPorId(id);
+        var produto = _service.ObterPorId(id);
         return produto is null ? NotFound() : Ok(produto);
     }
 
     [HttpPost]
     public IActionResult Post(Produto produto)
     {
-        _service.Adicionar(produto);
+        _service.Criar(produto);
         return CreatedAtAction(nameof(GetById), new { id = produto.Id }, produto);
     }
 
     [HttpPut("{id}")]
     public IActionResult Put(int id, Produto produto)
     {
-        var existente = _service.BuscarPorId(id);
+        var existente = _service.ObterPorId(id);
         if (existente is null)
             return NotFound();
 
@@ -50,7 +51,7 @@ public class ProdutosController : ControllerBase
     [HttpDelete("{id}")]
     public IActionResult Delete(int id)
     {
-        var existente = _service.BuscarPorId(id);
+        var existente = _service.ObterPorId(id);
         if (existente is null)
             return NotFound();
 
