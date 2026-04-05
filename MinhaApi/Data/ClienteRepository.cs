@@ -2,7 +2,7 @@ using MinhaApi.Models;
 
 namespace MinhaApi.Data;
 
-public class ClienteRepository
+public class ClienteRepository : IClienteRepository
 {
     private readonly List<Cliente> _clientes = new()
     {
@@ -11,7 +11,7 @@ public class ClienteRepository
         new Cliente(3, "Pedro")
     };
 
-    public List<Cliente> Listar() => _clientes;
+    public IEnumerable<Cliente> Listar() => _clientes;
 
     public Cliente? BuscarPorId(int id) =>
         _clientes.FirstOrDefault(c => c.Id == id);

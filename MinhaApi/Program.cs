@@ -1,4 +1,5 @@
 using MinhaApi.Data;
+using MinhaApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,9 +10,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Registro dos repositórios
+// Registro dos repositórios e serviços
 builder.Services.AddSingleton<IProdutoRepository, ProdutoRepository>();
-builder.Services.AddSingleton<ClienteRepository>();
+builder.Services.AddSingleton<IClienteRepository, ClienteRepository>();
+
+builder.Services.AddSingleton<IProdutoService, ProdutoService>();
+builder.Services.AddSingleton<IClienteService, ClienteService>();
 
 var app = builder.Build();
 

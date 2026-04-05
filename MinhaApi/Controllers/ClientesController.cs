@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MinhaApi.Data;
 using MinhaApi.Models;
+using MinhaApi.Services;
 
 namespace MinhaApi.Controllers;
 
@@ -8,53 +9,53 @@ namespace MinhaApi.Controllers;
 [Route("api/[controller]")]
 public class ClientesController : ControllerBase
 {
-    private readonly ClienteRepository _repo;
+    private readonly IClienteService _service;
 
-    public ClientesController(ClienteRepository repo)
+    public ClientesController(IClienteService service)
     {
-        _repo = repo;
+        _service = service;
     }
 
     [HttpGet]
     public IActionResult Get()
     {
-        var clientes = _repo.Listar();
+        var clientes = _service.Listar();
         return Ok(clientes);
     }
 
     [HttpGet("{id}")]
     public IActionResult GetById(int id)
     {
-        var cliente = _repo.BuscarPorId(id);
+        var cliente = _service.ObterPorId(id);
         return cliente is null ? NotFound() : Ok(cliente);
     }
 
     [HttpPost]
     public IActionResult Post(Cliente cliente)
     {
-        _repo.Adicionar(cliente);
+        _service.Criar(cliente);
         return CreatedAtAction(nameof(GetById), new { id = cliente.Id }, cliente);
     }
 
     [HttpPut("{id}")]
     public IActionResult Put(int id, Cliente cliente)
     {
-        var existente = _repo.BuscarPorId(id);
+        var existente = _service.ObterPorId(id);
         if (existente is null)
             return NotFound();
 
-        _repo.Atualizar(id, cliente);
+        _service.Atualizar(id, cliente);
         return NoContent();
     }
 
     [HttpDelete("{id}")]
     public IActionResult Delete(int id)
     {
-        var existente = _repo.BuscarPorId(id);
+        var existente = _service.ObterPorId(id);
         if (existente is null)
             return NotFound();
 
-        _repo.Remover(id);
+        _service.Remover(id);
         return NoContent();
     }
 }

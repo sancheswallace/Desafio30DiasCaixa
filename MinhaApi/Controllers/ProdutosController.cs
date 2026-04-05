@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using MinhaApi.Data;
 using MinhaApi.Models;
 using MinhaApi.Services;
 
