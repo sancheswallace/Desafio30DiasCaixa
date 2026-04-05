@@ -6,36 +6,36 @@ using MinhaApi.Data;
 using MinhaApi.Models;
 using MinhaApi.Services;
 
-public class ProdutosControllerTests
+public class ClientesControllerTests
 {
     [Fact]
-    public void GetById_DeveRetornarOk_QuandoProdutoExiste()
+    public void GetById_DeveRetornarOk_QuandoClienteExiste()
     {
         // Arrange
-        var mockService = new Mock<IProdutoService>();
+        var mockService = new Mock<IClienteService>();
         mockService.Setup(r => r.ObterPorId(1))
-                .Returns(new Produto(1, "Mouse", 50));
+                .Returns(new Cliente(1, "João"));
 
-        var controller = new ProdutosController(mockService.Object);
+        var controller = new ClientesController(mockService.Object);
 
         // Act
         var resultado = controller.GetById(1);
 
         // Assert
         var ok = Assert.IsType<OkObjectResult>(resultado);
-        var produto = Assert.IsType<Produto>(ok.Value);
-        Assert.Equal("Mouse", produto.Nome);
+        var cliente = Assert.IsType<Cliente>(ok.Value);
+        Assert.Equal("João", cliente.Nome);
     }
 
     [Fact]
-    public void GetById_DeveRetornarNotFound_QuandoProdutoNaoExiste()
+    public void GetById_DeveRetornarNotFound_QuandoClienteNaoExiste()
     {
         // Arrange
-        var mockService = new Mock<IProdutoService>();
+        var mockService = new Mock<IClienteService>();
         _ = mockService.Setup(r => r.ObterPorId(99))
-                .Returns((Produto?)null);
+                .Returns((Cliente?)null);
 
-        var controller = new ProdutosController(mockService.Object);
+        var controller = new ClientesController(mockService.Object);
 
         // Act
         var resultado = controller.GetById(99);
