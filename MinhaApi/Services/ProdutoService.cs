@@ -12,7 +12,7 @@ public class ProdutoService : IProdutoService
         _repo = repo;
     }
 
-    public Produto ObterPorId(int id) => _repo.BuscarPorId(id);
+    public Produto? ObterPorId(int id) => _repo.BuscarPorId(id);
 
     public IEnumerable<Produto> Listar() => _repo.Listar();
 
