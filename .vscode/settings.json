@@ -1,0 +1,5 @@
+{
+    "accessibility.signals.chatUserActionRequired": {
+        "sound": "off"
+    }
+}
